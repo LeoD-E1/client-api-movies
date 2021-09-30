@@ -34,7 +34,7 @@ const SignUp = () => {
         <div className="col-md-6 col-lg-4">
           <div className="login-wrap p-0">
             <form onSubmit={handleSubmit(onSubmit)} className="signin-form">
-              <div className="form-group">
+              <div className="form-group m-2">
                 <input
                   type="text"
                   className="form-control"
@@ -45,7 +45,7 @@ const SignUp = () => {
                   <span>Username field is required</span>
                 )}
               </div>
-              <div className="form-group">
+              <div className="form-group m-2">
                 <input
                   type="email"
                   className="form-control"
@@ -62,7 +62,7 @@ const SignUp = () => {
                   <span>Insert a valid Email</span>
                 )}
               </div>
-              <div className="form-group">
+              <div className="form-group m-2">
                 <input
                   type="password"
                   className="form-control"

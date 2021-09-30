@@ -1,5 +1,5 @@
 {
-  "name": "client-api-ts",
+  "name": "client-api-movies",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
