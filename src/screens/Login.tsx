@@ -1,13 +1,26 @@
 import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { emailPattern } from "../constants/constants";
-
-interface User {
-  email: string;
-  password: string;
-}
+import { signin } from "../api/users/signin";
+import { useQueryClient, useMutation } from "react-query";
+import { useHistory } from "react-router-dom";
+import ToastComponent from "../components/ToastComponent";
+import { User } from "../types/users";
 
 const Login: FC = (): JSX.Element => {
+  useQueryClient();
+  const history = useHistory();
+
+  const mutation = useMutation(async (data: User) => {
+    const res: any = await signin(data);
+    const response = await res.json();
+
+    if (res.status >= 200 && res.status <= 210) {
+      localStorage.setItem("token", response.token);
+      history.push("/");
+    }
+    console.log(res);
+  });
   const {
     register,
     handleSubmit,
@@ -15,12 +28,12 @@ const Login: FC = (): JSX.Element => {
   } = useForm<User>();
 
   const onSubmit: SubmitHandler<User> = (data, e) => {
-    console.log(data);
-    e?.target.reset();
+    e?.preventDefault();
+    mutation.mutate(data);
   };
 
   return (
-    <div className="container">
+    <div className="container  mt-3 pt-3">
       <div className="row justify-content-center">
         <div className="col-md-6 text-center mb-5">
           <h2 className="heading-section">Login</h2>
@@ -69,6 +82,7 @@ const Login: FC = (): JSX.Element => {
                 </button>
               </div>
             </form>
+            {mutation.isError && <ToastComponent />}
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import "../styles/styles.css";
 import { NewUser } from "../types/users";
 import { useMutation, useQueryClient } from "react-query";
 import { createUser } from "../api/users/createUser";
+import SignupToast from "../components/SignupToast";
 
 const SignUp = () => {
   const {
@@ -16,13 +17,15 @@ const SignUp = () => {
   useQueryClient();
 
   const mutation = useMutation((data: NewUser) => createUser(data));
+
   const onSubmit: SubmitHandler<NewUser> = (data, e) => {
     mutation.mutate(data);
     e?.target.reset();
   };
 
   return (
-    <div className="container">
+    <div className="container  mt-3 pt-3">
+      {mutation.isSuccess && <SignupToast />}
       <div className="row justify-content-center">
         <div className="col-md-6 text-center mb-5">
           <h2 className="heading-section">Sign up</h2>
@@ -39,15 +42,15 @@ const SignUp = () => {
                   placeholder="Username"
                   {...register("username", {
                     required: true,
-                    min: 5,
-                    max: 20,
+                    minLength: 5,
+                    maxLength: 20,
                   })}
                   required
                 ></input>
                 {errors.username?.type === "required" && (
                   <span>Username field is required</span>
                 )}
-                {errors.username?.type === "min" && (
+                {errors.username?.type === "minLength" && (
                   <span>min 5 characters</span>
                 )}
               </div>

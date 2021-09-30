@@ -1,8 +1,8 @@
-import { NewUser } from "../../types/users";
+import { User } from "../../types/users";
 
-export const createUser = async (data: NewUser) => {
+export const signin = async (data: User) => {
   try {
-    const res = await fetch("http://localhost:4000/api/users/signup", {
+    const res = await fetch("http://localhost:4000/api/users/signin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
