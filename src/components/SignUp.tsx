@@ -1,12 +1,10 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { emailPattern } from "../constants/constants";
 import "../styles/styles.css";
-
-interface NewUser {
-  username: string;
-  email: string;
-  password: string;
-}
+import { NewUser } from "../types/users";
+import { useMutation, useQueryClient } from "react-query";
+import { createUser } from "../api/users/createUser";
 
 const SignUp = () => {
   const {
@@ -15,13 +13,13 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<NewUser>();
 
+  useQueryClient();
+
+  const mutation = useMutation((data: NewUser) => createUser(data));
   const onSubmit: SubmitHandler<NewUser> = (data, e) => {
-    console.log(data);
+    mutation.mutate(data);
     e?.target.reset();
   };
-
-  const emailPattern =
-    /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
 
   return (
     <div className="container">
@@ -39,10 +37,18 @@ const SignUp = () => {
                   type="text"
                   className="form-control"
                   placeholder="Username"
-                  {...register("username", { required: true, min: 6, max: 20 })}
+                  {...register("username", {
+                    required: true,
+                    min: 5,
+                    max: 20,
+                  })}
+                  required
                 ></input>
                 {errors.username?.type === "required" && (
                   <span>Username field is required</span>
+                )}
+                {errors.username?.type === "min" && (
+                  <span>min 5 characters</span>
                 )}
               </div>
               <div className="form-group m-2">
@@ -54,6 +60,7 @@ const SignUp = () => {
                     required: true,
                     pattern: emailPattern,
                   })}
+                  required
                 ></input>
                 {errors.email?.type === "required" && (
                   <span>Email field is required</span>
@@ -68,6 +75,7 @@ const SignUp = () => {
                   className="form-control"
                   placeholder="Password"
                   {...register("password", { required: true })}
+                  required
                 ></input>
                 <span className="fa fa-fw fa-eye field-icon toggle-password"></span>
                 {errors.password?.type === "required" && (
@@ -82,6 +90,7 @@ const SignUp = () => {
                   Sign up
                 </button>
               </div>
+              {mutation.isLoading && <h4>Signing up...</h4>}
             </form>
           </div>
         </div>

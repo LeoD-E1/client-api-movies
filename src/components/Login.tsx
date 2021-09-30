@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { emailPattern } from "../constants/constants";
 
 interface User {
   email: string;
@@ -7,9 +8,6 @@ interface User {
 }
 
 const Login: FC = (): JSX.Element => {
-  const regexEmail =
-    /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-
   const {
     register,
     handleSubmit,
@@ -38,7 +36,7 @@ const Login: FC = (): JSX.Element => {
                   className="form-control"
                   placeholder="Email"
                   {...register("email", {
-                    pattern: regexEmail,
+                    pattern: emailPattern,
                     required: true,
                   })}
                   required

@@ -1,11 +1,16 @@
 import React from "react";
 import AuthScreen from "./screens/AuthScreen";
+import { QueryClientProvider, QueryClient } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="App">
-      <AuthScreen />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        <AuthScreen />
+      </div>
+    </QueryClientProvider>
   );
 }
 
