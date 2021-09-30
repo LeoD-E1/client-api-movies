@@ -22,33 +22,59 @@ const Login: FC = (): JSX.Element => {
   };
 
   return (
-    <>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Email</label>
-        <input
-          type="email"
-          placeholder="Email"
-          {...register("email", { pattern: regexEmail, required: true })}
-          required
-        ></input>
-        {errors.email?.type === "required" && (
-          <span>Email field is required</span>
-        )}
-        {errors.email?.type === "pattern" && <span>Type a valid email</span>}
-        <label>Password</label>
-        <input
-          type="password"
-          placeholder="Password"
-          {...register("password", { required: true })}
-          required
-        ></input>
-        {errors.password?.type === "required" && (
-          <span>Password field is required</span>
-        )}
-        <button type="submit">Sign in</button>
-      </form>
-    </>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-md-6 text-center mb-5">
+          <h2 className="heading-section">Login</h2>
+        </div>
+      </div>
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-lg-4">
+          <div className="login-wrap p-0">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="form-group m-2">
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Email"
+                  {...register("email", {
+                    pattern: regexEmail,
+                    required: true,
+                  })}
+                  required
+                ></input>
+                {errors.email?.type === "required" && (
+                  <span>Email field is required</span>
+                )}
+                {errors.email?.type === "pattern" && (
+                  <span>Type a valid email</span>
+                )}
+              </div>
+              <div className="form-group m-2">
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  {...register("password", { required: true })}
+                  required
+                ></input>
+                {errors.password?.type === "required" && (
+                  <span>Password field is required</span>
+                )}
+              </div>
+              <div className="form-group m-2">
+                <button
+                  type="submit"
+                  className="form-control btn btn-primary submit px-3"
+                >
+                  Sign in
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
