@@ -5,9 +5,12 @@ import "../styles/styles.css";
 import { NewUser } from "../types/users";
 import { useMutation, useQueryClient } from "react-query";
 import { createUser } from "../api/users/createUser";
-import SignupToast from "../components/SignupToast";
+import { useHistory, Link } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 
 const SignUp = () => {
+  const history = useHistory();
+
   const {
     register,
     handleSubmit,
@@ -16,16 +19,24 @@ const SignUp = () => {
 
   useQueryClient();
 
-  const mutation = useMutation((data: NewUser) => createUser(data));
+  const mutation = useMutation(async (data: NewUser) => {
+    const res: any = await createUser(data);
+    const response = await res.json();
+    if (res.status >= 200 && res.status <= 210) {
+      localStorage.setItem("token", response.token);
+      history.push("/");
+    } else {
+      const message: any = document.getElementById("message");
+      message.innerHTML = response.message;
+    }
+  });
 
   const onSubmit: SubmitHandler<NewUser> = (data, e) => {
     mutation.mutate(data);
-    e?.target.reset();
   };
 
   return (
     <div className="container  mt-3 pt-3">
-      {mutation.isSuccess && <SignupToast />}
       <div className="row justify-content-center">
         <div className="col-md-6 text-center mb-5">
           <h2 className="heading-section">Sign up</h2>
@@ -34,6 +45,16 @@ const SignUp = () => {
       <div className="row justify-content-center">
         <div className="col-md-6 col-lg-4">
           <div className="login-wrap p-0">
+            <div className="row">
+              <div className="col-md-9 col-lg-10">
+                <span id="message"></span>
+              </div>
+              <div className="col-md-3 col-lg-2">
+                {mutation.isLoading && (
+                  <Spinner animation="border" size="sm" role="status" />
+                )}
+              </div>
+            </div>
             <form onSubmit={handleSubmit(onSubmit)} className="signin-form">
               <div className="form-group m-2">
                 <input
@@ -52,6 +73,9 @@ const SignUp = () => {
                 )}
                 {errors.username?.type === "minLength" && (
                   <span>min 5 characters</span>
+                )}
+                {errors.username?.type === "maxLength" && (
+                  <span>max 20 characters</span>
                 )}
               </div>
               <div className="form-group m-2">
@@ -93,8 +117,10 @@ const SignUp = () => {
                   Sign up
                 </button>
               </div>
-              {mutation.isLoading && <h4>Signing up...</h4>}
             </form>
+            <Link to="/login">
+              <p>Login</p>
+            </Link>
           </div>
         </div>
       </div>

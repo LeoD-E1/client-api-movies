@@ -3,8 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { emailPattern } from "../constants/constants";
 import { signin } from "../api/users/signin";
 import { useQueryClient, useMutation } from "react-query";
-import { useHistory } from "react-router-dom";
-import ToastComponent from "../components/ToastComponent";
+import { useHistory, Link } from "react-router-dom";
 import { User } from "../types/users";
 
 const Login: FC = (): JSX.Element => {
@@ -18,8 +17,10 @@ const Login: FC = (): JSX.Element => {
     if (res.status >= 200 && res.status <= 210) {
       localStorage.setItem("token", response.token);
       history.push("/");
+    } else {
+      const message: any = document.getElementById("message");
+      message.innerHTML = response.message;
     }
-    console.log(res);
   });
   const {
     register,
@@ -42,6 +43,7 @@ const Login: FC = (): JSX.Element => {
       <div className="row justify-content-center">
         <div className="col-md-6 col-lg-4">
           <div className="login-wrap p-0">
+            <span id="message"></span>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="form-group m-2">
                 <input
@@ -82,7 +84,9 @@ const Login: FC = (): JSX.Element => {
                 </button>
               </div>
             </form>
-            {mutation.isError && <ToastComponent />}
+            <Link to="/signup">
+              <p>signup</p>
+            </Link>
           </div>
         </div>
       </div>

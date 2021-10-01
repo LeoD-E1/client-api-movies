@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Toast } from "react-bootstrap";
-import "../styles/Toast.css";
 
 const ToastComponent = () => {
   const [show, setShow] = useState(true);
